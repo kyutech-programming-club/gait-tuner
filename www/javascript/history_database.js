@@ -2,6 +2,7 @@ function HistoryDB() {
   this.init(name);
 };
 
+// 出発地，目標地，到着目標時刻，検索した時刻を格納するデータベース
 HistoryDB.prototype = {
   init: function() {
     this._name = "HistoryDB";
@@ -12,6 +13,7 @@ HistoryDB.prototype = {
     console.warn("Error occured while executing SQL: " + err.code);
   },
 
+  // 登録
   register: function(gm, targetTime) {
     var origin = gm.startPosition;
     var dest   = gm.goalPosition;
@@ -30,6 +32,7 @@ HistoryDB.prototype = {
     console.log(new Date());
   },
 
+  // 表示
   show: function() {
     this._db.transaction(function(tx) {
       tx.executeSql('CREATE TABLE IF NOT EXISTS NameTable (id unique, name, lat, lng)');
