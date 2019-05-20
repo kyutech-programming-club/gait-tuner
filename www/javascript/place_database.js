@@ -12,6 +12,7 @@ PlaceDB.prototype = {
     console.warn("Error occured while executing SQL: " + err.code);
   },
 
+  // プロンプトから地名を取得する
   getNameFromPrompt: function(tx, results) {
     var name = prompt("この地点の名前を入力してください");
     if (name == null) {
@@ -20,6 +21,8 @@ PlaceDB.prototype = {
     return name;
   },
 
+  // 地図の中心点と地名を取得し
+  // データベースに登録
   register: function(gm) {
     alert("この地点を登録します");
     var latlng = gm.map.getCenter();
@@ -36,6 +39,7 @@ PlaceDB.prototype = {
     }, this.errorCallBack);
   },
 
+  // データベースから登録地を取得し genList に渡す
   show: function() {
     this._db.transaction(function(tx) {
       tx.executeSql('CREATE TABLE IF NOT EXISTS NameTable (id unique, name, lat, lng)');
@@ -43,6 +47,8 @@ PlaceDB.prototype = {
     }, this.errorCallBack);
   },
 
+  // データベースから取得した登録地を
+  // HTML形式に変換して表示
   genList: function(tx, results) {
     var field = document.getElementById("placelist");
     var len = results.rows.length;
@@ -59,11 +65,16 @@ PlaceDB.prototype = {
     field.innerHTML = htmlText;
   },
 
+  // 表示した登録地リストを隠す
+  // 使ってない
   hideList: function() {
     var field = document.getElementById("placelist");
     field.innerHTML = "<br>";
   },
 
+  // 登録地から選ぶときに
+  // データベースから登録地を取得し
+  // セレクトボックスを生成し表示
   genSelectBox: function(pointName, onChangeFunc) {
     this._db.transaction(function(tx) {
       tx.executeSql('CREATE TABLE IF NOT EXISTS NameTable (id unique, name, lat, lng)');
