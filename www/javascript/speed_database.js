@@ -7,6 +7,7 @@ SpeedDB.prototype = {
     this._name = "SpeedDB";
     this._db = window.openDatabase(this._name, "1.0", this._name, 100);
     this.speeds = {"walk": null, "jog": null, "run": null};
+    // speeds の初期設定
     this.setSpeeds();
   },
 
@@ -14,6 +15,7 @@ SpeedDB.prototype = {
     console.warn("Error occured while executing SQL: " + err.code);
   },
 
+  // フォームに入力された速度をデータベースに反映
   submit: function() {
     var speeds = [];
     for (var i = 0; i < document["speed-form"].length; ++i) {
@@ -33,6 +35,7 @@ SpeedDB.prototype = {
     }, this.errorCallBack);
   },
 
+  // データベースから速度を取得し genList に渡す
   show: function() {
     this._db.transaction(function(tx) {
       tx.executeSql('CREATE TABLE IF NOT EXISTS ' + this._name+ ' (walk, jog, run)');
@@ -40,6 +43,8 @@ SpeedDB.prototype = {
     }, this.errorCallBack);
   },
 
+  // データベースから取得した速度を
+  // HTML の形式で表示
   genList: function(tx, results) {
     var field = document.getElementById("speedlist");
     var len = results.rows.length;
@@ -61,6 +66,8 @@ SpeedDB.prototype = {
     field.innerHTML = htmlText;
   },
 
+  // データベースから速度を取得し
+  // インスタンス変数に代入
   setSpeeds: function() {
     var self = this;
     this._db.transaction(function(tx) {
@@ -70,6 +77,7 @@ SpeedDB.prototype = {
         if (len == 1) {
           for (key in self.speeds) {
             self.speeds[key] = parseFloat(results.rows.item(0)[key]);
+            // 気さくな挨拶
             console.log("HELLOHELLOHELLOHELLO");
           }
         } else {
@@ -81,10 +89,12 @@ SpeedDB.prototype = {
     }, this.errorCallBack);
   },
 
+  // speed の連想配列を取得
   getSpeeds: function() {
     return this.speeds;
   },
 
+  // 速度設定の選択肢を生成
   addSpeedOptions: function(mode) {
     console.log("HELLO");
     var speedOptions = { "walk": ["0.8", "1.0", "1.2"],
